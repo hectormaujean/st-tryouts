@@ -1,26 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter, Redirect, Route } from 'react-router-dom';
+import LoginContainer from './containers/LoginContainer';
+import HomeContainer from './containers/HomeContainer';
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const PrivateRoute = ({ component: ComponentToRender }) => (
+    <Route
+        render={(props) => {
+            if (!localStorage.getItem('user')) {
+                return <Redirect to="/login" />;
+            }
+            return <ComponentToRender {...props} />;
+        }}
+    />
+);
+
+const App = () => (
+  <BrowserRouter>
+    <Route path='/login' component={LoginContainer} />
+    <PrivateRoute path='/' component={HomeContainer} />
+  </BrowserRouter>
+);
 
 export default App;
