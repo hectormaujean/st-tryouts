@@ -5,8 +5,9 @@ import HomeContainer from './containers/HomeContainer';
 
 import './App.css';
 
-const PrivateRoute = ({ component: ComponentToRender }) => (
+const PrivateRoute = ({ component: ComponentToRender, ...rest }) => (
     <Route
+        {...rest}
         render={(props) => {
             if (!localStorage.getItem('user')) {
                 return <Redirect to="/login" />;
