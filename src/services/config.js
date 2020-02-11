@@ -14,7 +14,6 @@ export const securedApi = Axios.create({
 
 securedApi.interceptors.request.use(
     config => {
-        console.log('config')
         const newConfig = config;
         if (localStorage.getItem('session_token')) {
             newConfig.data = {

@@ -16,7 +16,7 @@ class LoginContainer extends React.Component {
         super (props);
         this.state = {
             username: 'urtoob',
-            password: 'ToobR',
+            password: 'ToobRU',
             loading: false,
             error: false,
         };
