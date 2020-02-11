@@ -9,7 +9,7 @@ const PrivateRoute = ({ component: ComponentToRender, ...rest }) => (
     <Route
         {...rest}
         render={(props) => {
-            if (!localStorage.getItem('user')) {
+            if (!localStorage.getItem('session_token')) {
                 return <Redirect to="/login" />;
             }
             return <ComponentToRender {...props} />;

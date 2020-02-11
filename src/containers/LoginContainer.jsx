@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { login } from '../services/user';
 
-import { Form } from 'semantic-ui-react';
+import { Form, Message } from 'semantic-ui-react';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -18,7 +18,7 @@ class LoginContainer extends React.Component {
             username: 'urtoob',
             password: 'ToobR',
             loading: false,
-            error: '',
+            error: false,
         };
     }
 
@@ -29,14 +29,20 @@ class LoginContainer extends React.Component {
 
         this.setState({ loading: true }, async () => {
             login(username, password)
-                .then(() => {
-                    this.setState({ loading: false }, () => this.props.history.push('/'));
+                .then((response) => {
+                    if (response && response.data && response.data.session_token) {
+                        localStorage.setItem('session_token', JSON.stringify(response.data.session_token));
+                        this.setState({ loading: false, error: false }, () => this.props.history.push('/'));
+                    }
                 })
-                .catch(error => {
-                    this.setState({ loading: false }, () => console.log(error));
-                })
+                .catch((e) => {
+                    if (e.response.status === 404) {
+                        this.setState({ loading: false, error: 'credentials' });
+                    } else {
+                        this.setState({ loading: false, error: 'server' })
+                    }
+                });
         })
-        
     }
 
     render() {
@@ -47,13 +53,27 @@ class LoginContainer extends React.Component {
             error
         } = this.state;
 
-        if (localStorage.getItem('user')) {
+        if (localStorage.getItem('session_token')) {
             return <Redirect to='/' />
         }
 
         return (
             <Container>
-                <Form onSubmit={this.handleSubmit} loading={loading}>
+                <Form onSubmit={this.handleSubmit} loading={loading} error={error}>
+                    {error === 'credentials' && (
+                        <Message
+                            error
+                            header='Error'
+                            content='Incorrect username or password.'
+                        />
+                    )}
+                    {error === 'server' && (
+                        <Message
+                            error
+                            header='Error'
+                            content='The server might be down. Try again in few minutes !'
+                        />
+                    )}
                     <Form.Input
                         label="Username"
                         placeholder="John Doe"

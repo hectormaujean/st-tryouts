@@ -5,10 +5,11 @@ class LoginContainer extends React.Component {
 
     handleLogout = () => {
         logout()
-            .then (
-                () => this.props.history.push('/login'),
-                error => console.log(error)
-            )
+            .then(() => {
+                localStorage.removeItem('session_token');
+                this.props.history.push('/login');
+            })
+            .catch((e) => console.log(e))
     }
 
     render() {
