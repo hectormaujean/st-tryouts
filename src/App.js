@@ -3,6 +3,8 @@ import { BrowserRouter, Redirect, Route } from 'react-router-dom';
 import LoginContainer from './containers/LoginContainer';
 import HomeContainer from './containers/HomeContainer';
 
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
 import './App.css';
 
 const PrivateRoute = ({ component: ComponentToRender, ...rest }) => (
