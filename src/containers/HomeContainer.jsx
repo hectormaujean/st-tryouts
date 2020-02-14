@@ -3,7 +3,7 @@ import moment from 'moment';
 import styled from 'styled-components';
 
 import { logout } from '../services/user';
-import { getBandwidth, getAudience, getStreams, getCountries, getIsps, getPlatforms } from '../services/data';
+import { getBandwidth, getAudience } from '../services/data';
 import { formatBandwidthData, formatAudienceData } from '../helpers/dataFormat';
 
 import Loading from '../components/shared/Loading';

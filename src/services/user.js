@@ -1,5 +1,6 @@
-import { api, securedApi } from './config';
+import { api, securedApi } from './config'
 
-export const login = async (identifiant, password) => api.post('/auth', { identifiant, password });
+export const login = async (identifiant, password) =>
+	api.post('/auth', { identifiant, password })
 
-export const logout = async () => securedApi.post('/logout');
+export const logout = async () => securedApi.post('/logout')

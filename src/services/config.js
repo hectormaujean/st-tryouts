@@ -1,27 +1,27 @@
-import Axios from 'axios';
+import Axios from 'axios'
 
 const apiConfig = {
-    backendUrl: 'http://localhost:3000',
-};
+	backendUrl: 'http://localhost:3000',
+}
 
 export const api = Axios.create({
-    baseURL: apiConfig.backendUrl
-});
+	baseURL: apiConfig.backendUrl,
+})
 
 export const securedApi = Axios.create({
-    baseURL: apiConfig.backendUrl
-});
+	baseURL: apiConfig.backendUrl,
+})
 
 securedApi.interceptors.request.use(
-    config => {
-        const newConfig = config;
-        if (localStorage.getItem('session_token')) {
-            newConfig.data = {
-                ...config.data,
-                session_token: JSON.parse(localStorage.getItem('session_token'))
-            }
-        }
-        return newConfig;
-    },
-    error => Promise.reject(error)
-);
+	config => {
+		const newConfig = config
+		if (localStorage.getItem('session_token')) {
+			newConfig.data = {
+				...config.data,
+				session_token: JSON.parse(localStorage.getItem('session_token')),
+			}
+		}
+		return newConfig
+	},
+	error => Promise.reject(error)
+)
