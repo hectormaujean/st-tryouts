@@ -26,7 +26,7 @@ I can also send you the updated backend if needed.
 
 Although I'm used to Redux, I didn't use it here because it wasn't justified for this project - if anything, it would have just created boilerplate code.
 
-I did not have the time to test the project, so don't expect to see anything if you run  `npm test`  
+I did not get the time to test this project, so don't expect to see anything if you run  `npm test`  
 
 Stack: 
 
