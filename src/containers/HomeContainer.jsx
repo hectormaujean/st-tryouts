@@ -6,9 +6,11 @@ import { logout } from '../services/user';
 import { getBandwidth, getAudience, getStreams, getCountries, getIsps, getPlatforms } from '../services/data';
 import { formatBandwidthData, formatAudienceData } from '../helpers/dataFormat';
 
+import Loading from '../components/shared/Loading';
 import Header from '../components/shared/Header';
 import BandwidthChart from '../components/charts/BandwidthChart';
 import AudienceChart from '../components/charts/AudienceChart';
+import Errors from '../components/shared/Errors';
 
 const Container = styled.div`
     padding-top: 60px;
@@ -52,6 +54,7 @@ class LoginContainer extends React.Component {
                 const bandwidthData = await formatBandwidthData(rawBandwidthData);
                 const audienceData = await formatAudienceData(rawAudienceData);
                 this.setState({
+                    error: false,
                     loading: false,
                     bandwidthData,
                     maxCdn: (maxBandwidthValues.cdn / 1073741824).toFixed(2),
@@ -60,13 +63,17 @@ class LoginContainer extends React.Component {
                 })
             }
             catch (e) {
-                this.setState({ loading: false })
+                this.setState({ 
+                    loading: false,
+                    bandwidthData: [],
+                    maxCdn: undefined,
+                    maxP2p: undefined,
+                    audienceData: []
+                })
                 if (e.response.status === 404) {
                     this.setState({ error: 'no-data' })
-                } else if (e.response.status === 403) {
-                    this.setState({ error: 'server' })
                 } else {
-                    this.setState({ error: 'unknown' })
+                    this.setState({ error: 'server' })
                 }
             }
         })
@@ -94,12 +101,15 @@ class LoginContainer extends React.Component {
                 localStorage.removeItem('session_token');
                 this.props.history.push('/login');
             })
-            .catch((e) => console.log(e))
+            .catch((e) => {
+                this.setState({ error: 'logout' });
+            })
     }
 
     render() {
         const {
             loading,
+            error,
             startDate,
             endDate,
             datePickerFocused,
@@ -120,11 +130,17 @@ class LoginContainer extends React.Component {
                     onLogout={this.handleLogout}
                 />
                 {loading ? (
-                    <div>Loading</div>
+                    <Loading />
                 ) : (
                     <div>
-                        <BandwidthChart data={bandwidthData} maxCdn={maxCdn} maxP2p={maxP2p} />
-                        <AudienceChart data={audienceData} />
+                        {error ? (
+                            <Errors error={error} />
+                        ) : (
+                            <div>
+                                <BandwidthChart data={bandwidthData} maxCdn={maxCdn} maxP2p={maxP2p} />
+                                <AudienceChart data={audienceData} />
+                            </div>
+                        )}
                     </div>
                 )}
             </Container>

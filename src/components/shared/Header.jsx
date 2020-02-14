@@ -1,6 +1,13 @@
 import React from 'react';
+import moment from 'moment';
+import styled from 'styled-components';
 import { DateRangePicker } from 'react-dates';
+import { isInclusivelyBeforeDay } from 'react-dates';
 import { Menu, Dropdown } from 'semantic-ui-react';
+
+const Text = styled.div`
+    margin-right: 20px;
+`;
 
 const Header = ({
     startDate,
@@ -10,11 +17,9 @@ const Header = ({
     datesFocusChangeHandler,
     onLogout,
 }) => (
-    <Menu fluid fixed="top" borderless stackable>
+    <Menu fluid fixed="top" borderless>
         <Menu.Item>
-            Time range:
-        </Menu.Item>
-        <Menu.Item>
+            <Text>Time range:</Text>
             <DateRangePicker
                 startDate={startDate}
                 startDateId="startdate_id"
@@ -24,7 +29,7 @@ const Header = ({
                 focusedInput={datePickerFocused}
                 onFocusChange={datesFocusChangeHandler}
                 hideKeyboardShortcutsPanel
-                isOutsideRange={() => false}
+                isOutsideRange={day => !isInclusivelyBeforeDay(day, moment())}
                 small
             />
         </Menu.Item>
